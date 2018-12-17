@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk#Agg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
 import matplotlib.animation as animation
@@ -79,7 +79,7 @@ def animate(i):
     SQ_comm=SQ_comm1+SQ_comm2
     df = pd.read_sql_query(SQ_comm,conn)
     df['datestamp'] = pd.to_datetime(df['datestamp'])#, unit='s')
-    last_col=df.iloc[-1,1:5]
+    #last_col=df.iloc[-1,1:5]
     HF_q=df.iloc[-1,4]
     t.delete(1.0,END)
     t.insert('insert',HF_q)
@@ -99,13 +99,13 @@ def animate(i):
     # a3.xaxis.set_major_formatter(xfmt)
     # a4.xaxis.set_major_formatter(xfmt)
     #ax.set_xticklabels( rotation=45 )
-    a.plot(df['datestamp'],df['HF'])
+    a.plot(df['datestamp'],df['CxF'])
     #cursor = Cursor(a, useblit=True, color='red', linewidth=2)
     #a.set_xticklabels(xlabels, rotation=45)
-    a.set_title('HF ppm')
+    a.set_title('CxF ppb')
     a1.plot(df["datestamp"],df["H2O"])
     #a1.set_xticklabels(xlabels, rotation=45)
-    a1.set_title('H2O ppm')
+    a1.set_title('H2O ppb')
     # a2.plot(df["datestamp"],df["value3"])
     # # a2.set_xticklabels(xlabels, rotation=45)
     # a2.set_title('Compressor2 temp')
@@ -118,7 +118,7 @@ def animate(i):
     
     
 
-def LoadData():
+def LoadData():  # need reflash for plot
     global yyyy_f_
     global mm_f_
     global dd_f_
@@ -131,8 +131,8 @@ def LoadData():
     global HH_t_
     global MM_t_
     global SS_t_                                                                
-    from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_#+" "+HH_f_+":"+MM_f_+":"+SS_f_
-    to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_#+" "+HH_t_+":"+MM_t_+":"+SS_t_
+    from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_+" "+HH_f_#+":"+MM_f_+":"+SS_f_
+    to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_+" "+HH_t_#+":"+MM_t_+":"+SS_t_
     load_comm='SELECT * FROM ABB_LGR WHERE datestamp BETWEEN "%s" AND "%s"' %(from_str , to_str)
     print(load_comm)
     df = pd.read_sql_query(load_comm,conn)
@@ -153,11 +153,11 @@ def LoadData():
         # b2.xaxis.set_major_formatter(xfmt)
         # b3.xaxis.set_major_formatter(xfmt)
         # b4.xaxis.set_major_formatter(xfmt)
-        b.plot(df["datestamp"],df['HF'])
-        b.set_title('HF ppm')
+        b.plot(df["datestamp"],df['CxF'])
+        b.set_title('CxF ppb')
         #b.canvas.flush_events()
         b1.plot(df["datestamp"],df["H2O"])
-        b1.set_title('H20 ppm')
+        b1.set_title('H20 ppb')
         # b2.plot(df["datestamp"],df["value3"])
         # b2.set_title('Compressor2 temp')
         # b3.plot(df["datestamp"],df["value4"])
@@ -180,8 +180,8 @@ def SaveCSV():
     global HH_t_
     global MM_t_
     global SS_t_                                                                
-    from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_+" "+HH_f_+":"+MM_f_+":"+SS_f_
-    to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_+" "+HH_t_+":"+MM_t_+":"+SS_t_
+    from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_+" "+HH_f_#+":"+MM_f_+":"+SS_f_
+    to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_+" "+HH_t_#+":"+MM_t_+":"+SS_t_
     load_comm='SELECT * FROM ABB_LGR WHERE datestamp BETWEEN "%s" AND "%s"' %(from_str , to_str)
     #print(load_comm)
     df = pd.read_sql_query(load_comm,conn)
@@ -291,10 +291,10 @@ class PageOne(tk.Frame):
             dd_f_=comboxlist3.get()
             print(dd_f_) 
         
-        # def go4(*args):   
-        #     global HH_f_
-        #     HH_f_=comboxlist4.get()
-        #     print(HH_f_) 
+        def go4(*args):   
+            global HH_f_
+            HH_f_=comboxlist4.get()
+            print(HH_f_) 
 
         # def go5(*args):   
         #     global MM_f_
@@ -321,10 +321,10 @@ class PageOne(tk.Frame):
             dd_t_=comboxlist9.get()
             print(dd_t_) 
         
-        # def go10(*args):   
-        #     global HH_t_
-        #     HH_t_=comboxlist10.get()
-        #     print(HH_t_) 
+        def go10(*args):   
+            global HH_t_
+            HH_t_=comboxlist10.get()
+            print(HH_t_) 
 
         # def go11(*args):   
         #     global MM_t_
@@ -370,12 +370,12 @@ class PageOne(tk.Frame):
         label =tk.Label(frm_2, text=" ",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
-        # comvalue4=tk.StringVar()
-        # comboxlist4=ttk.Combobox(frm_2,width=4,textvariable=comvalue4) 
-        # comboxlist4["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
-        # comboxlist4.current(0)  
-        # comboxlist4.bind("<<ComboboxSelected>>",go4)  
-        # comboxlist4.pack(side='left')
+        comvalue4=tk.StringVar()
+        comboxlist4=ttk.Combobox(frm_2,width=4,textvariable=comvalue4) 
+        comboxlist4["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
+        comboxlist4.current(0)  
+        comboxlist4.bind("<<ComboboxSelected>>",go4)  
+        comboxlist4.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
@@ -429,15 +429,15 @@ class PageOne(tk.Frame):
         comboxlist9.bind("<<ComboboxSelected>>",go9)  
         comboxlist9.pack(side='left')
 
-        # label =tk.Label(frm_2, text=" ",font=LARGE_FONT)
-        # label.pack(side='left')
+        label =tk.Label(frm_2, text=" ",font=('Arial', 12),background='black',foreground="white")
+        label.pack(side='left')
 
-        # comvalue10=tk.StringVar()
-        # comboxlist10=ttk.Combobox(frm_2,width=4,textvariable=comvalue10) 
-        # comboxlist10["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
-        # comboxlist10.current(0)  
-        # comboxlist10.bind("<<ComboboxSelected>>",go10)  
-        # comboxlist10.pack(side='left')
+        comvalue10=tk.StringVar()
+        comboxlist10=ttk.Combobox(frm_2,width=4,textvariable=comvalue10) 
+        comboxlist10["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
+        comboxlist10.current(0)  
+        comboxlist10.bind("<<ComboboxSelected>>",go10)  
+        comboxlist10.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
@@ -476,8 +476,8 @@ class PageOne(tk.Frame):
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         #canvas.get_tk_widget().grid( padx=10, pady=10)
-        toolbar = NavigationToolbar2Tk(canvas, self)
-        #toolbar = NavigationToolbar2TkAgg(canvas, self)
+        #toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         #canvas._tkcanvas.grid( padx=10, pady=10)
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -525,7 +525,7 @@ class GraphPage(tk.Frame):
         button1.pack(padx=30,side='right')
         
         #global time_string
-        show_time=tk.Label(frm_1, text = "HF",font=('Arial', 24),fg = "white", bg = "black")#, compound = tk.CENTER)
+        show_time=tk.Label(frm_1, text = "CxF",font=('Arial', 24),fg = "white", bg = "black")#, compound = tk.CENTER)
         #show_time.after(10,refresh_time())
         show_time.pack(side='left')
         global t
@@ -534,6 +534,9 @@ class GraphPage(tk.Frame):
         # t.insert('insert',get_time)
         # # #t.after(1000,refresh_time())
         t.pack(side='left')
+        ppb=tk.Label(frm_1, text = "ppb",font=('Arial', 24),fg = "white", bg = "black")#, compound = tk.CENTER)
+        #show_time.after(10,refresh_time())
+        ppb.pack(side='left')
         # # #refresh_time()
 
         def animate_pause():
@@ -565,8 +568,8 @@ class GraphPage(tk.Frame):
 
         canvas= FigureCanvasTkAgg(f,self)
         canvas.draw()
-        toolbar = NavigationToolbar2Tk(canvas, self)
-        #toolbar = NavigationToolbar2TkAgg(canvas, self)
+        #toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -575,7 +578,7 @@ class GraphPage(tk.Frame):
 #cs.close()
 #conn.close()
 app= SeaofBTCapp()
-ani=animation.FuncAnimation(f, animate,  interval=1000)#, blit=True)init_func=init,
+ani=animation.FuncAnimation(f, animate,  interval=5000)#, blit=True)init_func=init,
 app.mainloop()
 
 

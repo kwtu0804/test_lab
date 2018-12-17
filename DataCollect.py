@@ -58,7 +58,7 @@ conn = sqlite3.connect('ABB_LGR.db')
 cs= conn.cursor()
 
 def create_table():
-    cs.execute('CREATE TABLE IF NOT EXISTS ABB_LGR(unix REAL, datestamp TEXT, keyword TEXT, time_ TEXT, HF REAL, HF_sd REAL , H2O REAL, H2O_sd REAL )')
+    cs.execute('CREATE TABLE IF NOT EXISTS ABB_LGR(unix REAL, datestamp TEXT, keyword TEXT, time_ TEXT, CxF REAL, CxF_sd REAL , H2O REAL, H2O_sd REAL )')
 
 create_table()
 
@@ -105,16 +105,16 @@ def upload_TS(data1,data2,data3,data4,data5):
 def save_data(value1,value2,value3,value4,value5):
     try:
         time_= value1
-        HF= float(value2)
-        H2O= float(value4)
-        HF_sd=float(value3)
-        H2O_sd=float(value5)
+        HF= float(value2)*1000
+        H2O= float(value4)*1000
+        HF_sd=float(value3)*1000
+        H2O_sd=float(value5)*1000
         unix= time.time()
         date = str(datetime.datetime.fromtimestamp(unix).strftime('%Y-%m-%d %H:%M:%S'))
         keyword = 'python'
         test=[unix, date, keyword, time_, HF, HF_sd, H2O, H2O_sd]
         print(unix, date, keyword, time_, HF, HF_sd, H2O, H2O_sd)
-        cs.execute("INSERT INTO ABB_LGR(unix, datestamp, keyword, time_, HF, HF_sd, H2O, H2O_sd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", test)
+        cs.execute("INSERT INTO ABB_LGR(unix, datestamp, keyword, time_, CxF, CxF_sd, H2O, H2O_sd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", test)
         conn.commit()
     except:
         print('database write error !!')
