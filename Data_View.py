@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
 import matplotlib.animation as animation
@@ -77,6 +77,7 @@ def animate(i):
     SQ_comm1="SELECT * FROM ABB_LGR WHERE unix >= (strftime('%s','now')"
     SQ_comm2="-%s)" % timeint
     SQ_comm=SQ_comm1+SQ_comm2
+    print(SQ_comm)
     df = pd.read_sql_query(SQ_comm,conn)
     df['datestamp'] = pd.to_datetime(df['datestamp'])#, unit='s')
     #last_col=df.iloc[-1,1:5]
@@ -115,8 +116,8 @@ def animate(i):
     # a4.plot(df["datestamp"],df["value5"])
     # # a4.set_xticklabels(xlabels, rotation=45)
     # a4.set_title('Romm Humi')
-    
-    
+
+
 
 def LoadData():  # need reflash for plot
     global yyyy_f_
@@ -130,7 +131,7 @@ def LoadData():  # need reflash for plot
     global dd_t_
     global HH_t_
     global MM_t_
-    global SS_t_                                                                
+    global SS_t_
     from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_+" "+HH_f_#+":"+MM_f_+":"+SS_f_
     to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_+" "+HH_t_#+":"+MM_t_+":"+SS_t_
     load_comm='SELECT * FROM ABB_LGR WHERE datestamp BETWEEN "%s" AND "%s"' %(from_str , to_str)
@@ -166,7 +167,7 @@ def LoadData():  # need reflash for plot
         # b4.set_title('Romm Humi')
     except:
         print("No file exists")
-    return 
+    return
 def SaveCSV():
     global yyyy_f_
     global mm_f_
@@ -179,7 +180,7 @@ def SaveCSV():
     global dd_t_
     global HH_t_
     global MM_t_
-    global SS_t_                                                                
+    global SS_t_
     from_str=yyyy_f_+"-"+mm_f_+"-"+dd_f_+" "+HH_f_#+":"+MM_f_+":"+SS_f_
     to_str=yyyy_t_+"-"+mm_t_+"-"+dd_t_+" "+HH_t_#+":"+MM_t_+":"+SS_t_
     load_comm='SELECT * FROM ABB_LGR WHERE datestamp BETWEEN "%s" AND "%s"' %(from_str , to_str)
@@ -192,26 +193,26 @@ def SaveCSV():
     if sf is None:
         return
     df.to_csv(sf)
-    
+
 
 class SeaofBTCapp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
-        
+
         tk.Tk.__init__(self, *args, **kwargs)
         tk.Tk.attributes(self, '-fullscreen',True)
         tk.Tk.iconbitmap(self,default="Troll Face.ico")
         tk.Tk.wm_title(self,"ABB_LGR data visualization program")
         #tk.Tk.configure(self,background='black')
-        
+
         container=tk.Frame(self)
         container.pack(side="top",fill="both",expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0,weight=1)
 
         self.frames={}
-        
-        for F in (StartPage, PageOne, GraphPage): 
+
+        for F in (StartPage, PageOne, GraphPage):
 
             frame=F(container,self)
 
@@ -225,13 +226,13 @@ class SeaofBTCapp(tk.Tk):
     def show_frame(self, cont):
         frame=self.frames[cont]
         frame.tkraise()
-    
+
 
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent,background='black')
-        
+
         label =tk.Label(self, text="Weltall TECH. CO. ABB-LGR Data Viewer",font=('Arial', 32),background='black',foreground="white")
         label.pack(pady=120,padx=10)
 
@@ -242,7 +243,7 @@ class StartPage(tk.Frame):
         button1=tk.Button(self,text="Start",font=('Arial', 32),
         command=lambda: controller.show_frame(GraphPage))
         button1.pack(pady=30,padx=10)
-        
+
         #button2=ttk.Button(self,text="Quit",
         #command=quit)
         #button2.pack()
@@ -274,191 +275,191 @@ class PageOne(tk.Frame):
         command=lambda: controller.show_frame(GraphPage))
         #button1.config(bg='black',foreground="yellow")
         button1.pack(pady=10,padx=10,anchor='nw')
-        
 
-        def go1(*args):   
+
+        def go1(*args):
             global yyyy_f_
             yyyy_f_=comboxlist.get()
-            print(yyyy_f_) 
+            print(yyyy_f_)
 
-        def go2(*args):   
+        def go2(*args):
             global mm_f_
             mm_f_=comboxlist2.get()
-            print(mm_f_) 
-        
-        def go3(*args):   
+            print(mm_f_)
+
+        def go3(*args):
             global dd_f_
             dd_f_=comboxlist3.get()
-            print(dd_f_) 
-        
-        def go4(*args):   
+            print(dd_f_)
+
+        def go4(*args):
             global HH_f_
             HH_f_=comboxlist4.get()
-            print(HH_f_) 
+            print(HH_f_)
 
-        # def go5(*args):   
+        # def go5(*args):
         #     global MM_f_
         #     MM_f_=comboxlist5.get()
-        #     print(MM_f_) 
+        #     print(MM_f_)
 
-        # def go6(*args):   
+        # def go6(*args):
         #     global SS_f_
         #     SS_f_=comboxlist6.get()
         #     print(SS_f_)
 
-        def go7(*args):   
+        def go7(*args):
             global yyyy_t_
             yyyy_t_=comboxlist7.get()
-            print(yyyy_t_) 
+            print(yyyy_t_)
 
-        def go8(*args):   
+        def go8(*args):
             global mm_t_
             mm_t_=comboxlist8.get()
-            print(mm_t_) 
-        
-        def go9(*args):   
+            print(mm_t_)
+
+        def go9(*args):
             global dd_t_
             dd_t_=comboxlist9.get()
-            print(dd_t_) 
-        
-        def go10(*args):   
+            print(dd_t_)
+
+        def go10(*args):
             global HH_t_
             HH_t_=comboxlist10.get()
-            print(HH_t_) 
+            print(HH_t_)
 
-        # def go11(*args):   
+        # def go11(*args):
         #     global MM_t_
         #     MM_t_=comboxlist11.get()
-        #     print(MM_t_) 
+        #     print(MM_t_)
 
-        # def go12(*args):   
+        # def go12(*args):
         #     global SS_t_
         #     SS_t_=comboxlist12.get()
-        #     print(SS_t_)  
+        #     print(SS_t_)
 
 
         label =tk.Label(frm_2, text="From",font=('Arial', 12),background='black',foreground="white")
         label.pack(padx=10,side='left')
 
         comvalue=tk.StringVar()
-        comboxlist=ttk.Combobox(frm_2,width=4,textvariable=comvalue) 
+        comboxlist=ttk.Combobox(frm_2,width=4,textvariable=comvalue)
         comboxlist["values"]=("2018","2019","2020","2021","2022","2023","2024","2025")
-        comboxlist.current(0)  
-        comboxlist.bind("<<ComboboxSelected>>",go1)  
+        comboxlist.current(0)
+        comboxlist.bind("<<ComboboxSelected>>",go1)
         comboxlist.pack(side='left')
 
         label =tk.Label(frm_2, text="-",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue2=tk.StringVar()
-        comboxlist2=ttk.Combobox(frm_2,width=4,textvariable=comvalue2) 
+        comboxlist2=ttk.Combobox(frm_2,width=4,textvariable=comvalue2)
         comboxlist2["values"]=("01","02","03","04","05","06","07","08","09","10","11","12")
-        comboxlist2.current(0)  
-        comboxlist2.bind("<<ComboboxSelected>>",go2)  
+        comboxlist2.current(0)
+        comboxlist2.bind("<<ComboboxSelected>>",go2)
         comboxlist2.pack(side='left')
 
         label =tk.Label(frm_2, text="-",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue3=tk.StringVar()
-        comboxlist3=ttk.Combobox(frm_2,width=4,textvariable=comvalue3) 
+        comboxlist3=ttk.Combobox(frm_2,width=4,textvariable=comvalue3)
         comboxlist3["values"]=("01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31")
-        comboxlist3.current(0)  
-        comboxlist3.bind("<<ComboboxSelected>>",go3)  
+        comboxlist3.current(0)
+        comboxlist3.bind("<<ComboboxSelected>>",go3)
         comboxlist3.pack(side='left')
 
         label =tk.Label(frm_2, text=" ",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue4=tk.StringVar()
-        comboxlist4=ttk.Combobox(frm_2,width=4,textvariable=comvalue4) 
+        comboxlist4=ttk.Combobox(frm_2,width=4,textvariable=comvalue4)
         comboxlist4["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
-        comboxlist4.current(0)  
-        comboxlist4.bind("<<ComboboxSelected>>",go4)  
+        comboxlist4.current(0)
+        comboxlist4.bind("<<ComboboxSelected>>",go4)
         comboxlist4.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
 
         # comvalue5=tk.StringVar()
-        # comboxlist5=ttk.Combobox(frm_2,width=4,textvariable=comvalue5) 
+        # comboxlist5=ttk.Combobox(frm_2,width=4,textvariable=comvalue5)
         # comboxlist5["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
         #                     ,"31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59")
-        # comboxlist5.current(0)  
-        # comboxlist5.bind("<<ComboboxSelected>>",go5)  
+        # comboxlist5.current(0)
+        # comboxlist5.bind("<<ComboboxSelected>>",go5)
         # comboxlist5.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
 
         # comvalue6=tk.StringVar()
-        # comboxlist6=ttk.Combobox(frm_2,width=4,textvariable=comvalue6) 
+        # comboxlist6=ttk.Combobox(frm_2,width=4,textvariable=comvalue6)
         # comboxlist6["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
         #                     ,"31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59")
-        # comboxlist6.current(0)  
-        # comboxlist6.bind("<<ComboboxSelected>>",go6) 
+        # comboxlist6.current(0)
+        # comboxlist6.bind("<<ComboboxSelected>>",go6)
         # comboxlist6.pack(side='left')
 
         label =tk.Label(frm_2, text="To",font=('Arial', 12),background='black',foreground="white")
         label.pack(padx=10,side='left')
 
         comvalue7=tk.StringVar()
-        comboxlist7=ttk.Combobox(frm_2,width=4,textvariable=comvalue7) 
+        comboxlist7=ttk.Combobox(frm_2,width=4,textvariable=comvalue7)
         comboxlist7["values"]=("2018","2019","2020","2021","2022","2023","2024","2025")
-        comboxlist7.current(0)  
-        comboxlist7.bind("<<ComboboxSelected>>",go7)  
+        comboxlist7.current(0)
+        comboxlist7.bind("<<ComboboxSelected>>",go7)
         comboxlist7.pack(side='left')
 
         label =tk.Label(frm_2, text="-",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue8=tk.StringVar()
-        comboxlist8=ttk.Combobox(frm_2,width=4,textvariable=comvalue8) 
+        comboxlist8=ttk.Combobox(frm_2,width=4,textvariable=comvalue8)
         comboxlist8["values"]=("01","02","03","04","05","06","07","08","09","10","11","12")
-        comboxlist8.current(0)  
-        comboxlist8.bind("<<ComboboxSelected>>",go8)  
+        comboxlist8.current(0)
+        comboxlist8.bind("<<ComboboxSelected>>",go8)
         comboxlist8.pack(side='left')
 
         label =tk.Label(frm_2, text="-",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue9=tk.StringVar()
-        comboxlist9=ttk.Combobox(frm_2,width=4,textvariable=comvalue9) 
+        comboxlist9=ttk.Combobox(frm_2,width=4,textvariable=comvalue9)
         comboxlist9["values"]=("01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31")
-        comboxlist9.current(0) 
-        comboxlist9.bind("<<ComboboxSelected>>",go9)  
+        comboxlist9.current(0)
+        comboxlist9.bind("<<ComboboxSelected>>",go9)
         comboxlist9.pack(side='left')
 
         label =tk.Label(frm_2, text=" ",font=('Arial', 12),background='black',foreground="white")
         label.pack(side='left')
 
         comvalue10=tk.StringVar()
-        comboxlist10=ttk.Combobox(frm_2,width=4,textvariable=comvalue10) 
+        comboxlist10=ttk.Combobox(frm_2,width=4,textvariable=comvalue10)
         comboxlist10["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
-        comboxlist10.current(0)  
-        comboxlist10.bind("<<ComboboxSelected>>",go10)  
+        comboxlist10.current(0)
+        comboxlist10.bind("<<ComboboxSelected>>",go10)
         comboxlist10.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
 
         # comvalue11=tk.StringVar()
-        # comboxlist11=ttk.Combobox(frm_2,width=4,textvariable=comvalue11) 
+        # comboxlist11=ttk.Combobox(frm_2,width=4,textvariable=comvalue11)
         # comboxlist11["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
         #                     ,"31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59")
-        # comboxlist11.current(0)  
-        # comboxlist11.bind("<<ComboboxSelected>>",go11)  
+        # comboxlist11.current(0)
+        # comboxlist11.bind("<<ComboboxSelected>>",go11)
         # comboxlist11.pack(side='left')
 
         # label =tk.Label(frm_2, text=":",font=LARGE_FONT)
         # label.pack(side='left')
 
         # comvalue12=tk.StringVar()
-        # comboxlist12=ttk.Combobox(frm_2,width=4,textvariable=comvalue12) 
+        # comboxlist12=ttk.Combobox(frm_2,width=4,textvariable=comvalue12)
         # comboxlist12["values"]=("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"
         #                     ,"31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59")
-        # comboxlist12.current(0)  
-        # comboxlist12.bind("<<ComboboxSelected>>",go12)  
+        # comboxlist12.current(0)
+        # comboxlist12.bind("<<ComboboxSelected>>",go12)
         # comboxlist12.pack(side='left')
 
         button2=tk.Button(frm_2,text="Save Data as CSV file",font=('Arial', 12),fg = "red", bg = "#313938",
@@ -469,23 +470,23 @@ class PageOne(tk.Frame):
                            command=lambda: LoadData())
         button3.pack(padx=10,side='right')
 
-        
+
 
         canvas= FigureCanvasTkAgg(g,self)
-        
+
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         #canvas.get_tk_widget().grid( padx=10, pady=10)
-        #toolbar = NavigationToolbar2Tk(canvas, self)
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar = NavigationToolbar2Tk(canvas, self)
+        #toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         #canvas._tkcanvas.grid( padx=10, pady=10)
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-    
-        
+
+
 #root=SeaofBTCapp()
 #time_string=StringVar()
-   
+
 # def refresh_time():
 #     get_time=time.strftime('%H:%M:%S')
 #     t.delete(1.0,END)
@@ -520,10 +521,10 @@ class GraphPage(tk.Frame):
         # img = PhotoImage(file='logo.gif')
         # panel = Label(frm_1, image = img)
         # panel.pack(side = "left", fill = "both", expand = "yes")
-        button1=tk.Button(frm_1,text="Quit",fg = "white", bg = "red",font=('Arial', 16),width=8, height=1, 
+        button1=tk.Button(frm_1,text="Quit",fg = "white", bg = "red",font=('Arial', 16),width=8, height=1,
         command=quit)
         button1.pack(padx=30,side='right')
-        
+
         #global time_string
         show_time=tk.Label(frm_1, text = "CxF",font=('Arial', 24),fg = "white", bg = "black")#, compound = tk.CENTER)
         #show_time.after(10,refresh_time())
@@ -555,7 +556,7 @@ class GraphPage(tk.Frame):
                     ani.event_source.stop()
                     print("pause")
 
-        button2=tk.Button(frm_1,text="History chart",fg = "red", bg = "#313938",font=('Arial', 16),width=15, height=1, 
+        button2=tk.Button(frm_1,text="History chart",fg = "red", bg = "#313938",font=('Arial', 16),width=15, height=1,
         command=lambda: controller.show_frame(PageOne)
         )
         button2.pack(padx=30,side='left')
@@ -568,17 +569,15 @@ class GraphPage(tk.Frame):
 
         canvas= FigureCanvasTkAgg(f,self)
         canvas.draw()
-        #toolbar = NavigationToolbar2Tk(canvas, self)
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar = NavigationToolbar2Tk(canvas, self)
+        #toolbar = NavigationToolbar2TkAgg(canvas, self)
         toolbar.update()
         canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-    
+
 
 #cs.close()
 #conn.close()
 app= SeaofBTCapp()
 ani=animation.FuncAnimation(f, animate,  interval=5000)#, blit=True)init_func=init,
 app.mainloop()
-
-

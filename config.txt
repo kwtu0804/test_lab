@@ -1,0 +1,9 @@
+[sys_config]
+
+ThingSpeak_API=KU0TXO6A77VIWD0T
+
+COM_port_number=COM9
+
+IFTTT_Url=https://maker.ifttt.com/trigger/tc_line_test/with/key/c881ZwUZyuYR044ylNB7B_
+
+Baud_rate=9600
